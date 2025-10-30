@@ -1,0 +1,56 @@
+PROCEDURE dot_product(v1 : ARRAY OF REAL, v2 : ARRAY OF REAL, m : INTEGER, VAR ps : REAL)
+VAR
+    k : INTEGER
+BEGIN
+    ps := 0.0
+    FOR k FROM 0 TO m-1 DO
+        ps := ps + v1[k] * v2[k]
+    END_FOR
+END_PROCEDURE
+
+// Main algorithm using the procedure
+ALGORITHM Check_Orthogonality_With_Procedure
+VAR
+    n, m : INTEGER
+    i, j : INTEGER
+    V1, V2 : ARRAY OF ARRAY OF REAL
+    ps : REAL
+
+BEGIN
+    READ(n, m)  // number of vector pairs and vector size
+
+    FOR i FROM 0 TO n-1 DO
+        FOR j FROM 0 TO m-1 DO
+            READ(V1[i][j])
+        END_FOR
+    END_FOR
+
+    FOR i FROM 0 TO n-1 DO
+        FOR j FROM 0 TO m-1 DO
+            READ(V2[i][j])
+        END_FOR
+    END_FOR
+
+    FOR i FROM 0 TO n-1 DO
+        dot_product(V1[i], V2[i], m, ps)
+
+        IF (ps = 0.0) THEN
+            WRITE("Pair ", i, ": vectors are orthogonal (dot product = 0)")
+        ELSE
+            WRITE("Pair ", i, ": not orthogonal (dot product = ", ps, ")")
+        END_IF
+    END_FOR
+END
+
+// Function version
+FUNCTION dot_product_func(v1 : ARRAY OF REAL, v2 : ARRAY OF REAL, m : INTEGER) : REAL
+VAR
+    k : INTEGER
+    sum : REAL
+BEGIN
+    sum := 0.0
+    FOR k FROM 0 TO m-1 DO
+        sum := sum + v1[k] * v2[k]
+    END_FOR
+    RETURN sum
+END_FUNCTION
