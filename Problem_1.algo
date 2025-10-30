@@ -1,0 +1,60 @@
+ALGORITHM Sum_Distinct_Elements
+VAR
+   A, B : ARRAYS OF INTEGER
+   i, j, sum : INTEGER
+   found : BOOLEAN
+BEGIN
+
+   //  arrays
+   A ← {3, 1, 7, 9}
+   B ← {2, 4, 1, 9, 3}
+   sum ← 0
+
+   // Check elements from the first array
+   FOR i ← 0 TO length(A)-1 DO
+        found ← FALSE
+        FOR j ← 0 TO length(B)-1 DO
+             IF (A[i] = B[j]) THEN
+                 found ← TRUE
+             END_IF
+        END_FOR
+        IF (found = FALSE) THEN
+             sum ← sum + A[i]
+        END_IF
+   END_FOR
+
+   // Check elements from the second array
+   FOR i ← 0 TO length(B)-1 DO
+        found ← FALSE
+        FOR j ← 0 TO length(A)-1 DO
+             IF (B[i] = A[j]) THEN
+                 found ← TRUE
+             END_IF
+        END_FOR
+        IF (found = FALSE) THEN
+             sum ← sum + B[i]
+        END_IF
+   END_FOR
+
+   // Display result
+   WRITE("The sum of distinct elements is: ", sum)
+
+END
+
+   // Run
+    A = [3, 1, 7, 9]
+    B = [2, 4, 1, 9, 3]
+
+    3 → also in B → ignore
+
+    1 → also in B → ignore
+
+    7 → not in B → add → sum = 7
+
+    9 → also in B → ignore
+
+    2 → not in A → add → sum = 9
+
+    4 → not in A → add → sum = 13
+  // Final Output:
+  The sum of distinct elements is: 13
