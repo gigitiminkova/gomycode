@@ -1,4 +1,3 @@
-// Procedure version
 ALGORITHM Sum_Distinct_Elements
 VAR
    A, B : ARRAYS OF INTEGER

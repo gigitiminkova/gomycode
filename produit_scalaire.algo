@@ -1,0 +1,106 @@
+PROCEDURE dot_product(v1 : ARRAY OF REAL, v2 : ARRAY OF REAL, m : INTEGER, VAR ps : REAL)
+VAR
+    k : INTEGER
+BEGIN
+    ps := 0.0
+    // boucle sur les composantes : boucle imbriquée (dans le sens "procédure appelée depuis une autre boucle")
+    FOR k FROM 0 TO m - 1 DO
+        ps := ps + v1[k] * v2[k]
+    END_FOR
+END_PROCEDURE
+
+// -------------------------------
+// Fonction : retourne le produit scalaire 
+// -------------------------------
+FUNCTION dot_product_func(v1 : ARRAY OF REAL, v2 : ARRAY OF REAL, m : INTEGER) : REAL
+VAR
+    k : INTEGER
+    sum : REAL
+BEGIN
+    sum := 0.0
+    FOR k FROM 0 TO m - 1 DO
+        sum := sum + v1[k] * v2[k]
+    END_FOR
+    RETURN sum
+END_FUNCTION
+
+// -------------------------------
+ALGORITHM Check_Orthogonality
+VAR
+    n, m : INTEGER
+    i, j : INTEGER
+    // Tableaux 2D pour stocker n vecteurs de dimension m
+    V1, V2 : ARRAY OF ARRAY OF REAL
+    ps : REAL            // résultat du produit scalaire (utilisé avec la procédure)
+    result : REAL        // résultat du produit scalaire (utilisé avec la fonction)
+    EPSILON : REAL       // tolérance pour comparer à zéro (pour les réels)
+BEGIN
+    // 1) Lire le nombre de paires et la dimension
+    WRITE("Enter number of pairs (n): ")
+    READ(n)
+    WRITE("Enter vector dimension (m): ")
+    READ(m)
+
+    // 2) Initialiser les tableaux V1 et V2 (taille n x m)
+    // une notation qui permet la création d'un tableau 2D :
+    // V1 ← TABLEAU_DE_TAILLE(n, m)
+    FOR i FROM 0 TO n - 1 DO
+        // créer la ligne i
+        V1[i] := ARRAY OF REAL[m]
+        V2[i] := ARRAY OF REAL[m]
+    END_FOR
+
+    // 3) Lecture des composantes de V1
+    WRITE("Enter components of V1 vectors (n vectors of m numbers):")
+    FOR i FROM 0 TO n - 1 DO
+        FOR j FROM 0 TO m - 1 DO
+            WRITE("V1[", i, "][", j, "] = ")
+            READ(V1[i][j])
+        END_FOR
+    END_FOR
+
+    // 4) Lecture des composantes de V2
+    WRITE("Enter components of V2 vectors (n vectors of m numbers):")
+    FOR i FROM 0 TO n - 1 DO
+        FOR j FROM 0 TO m - 1 DO
+            WRITE("V2[", i, "][", j, "] = ")
+            READ(V2[i][j])
+        END_FOR
+    END_FOR
+
+    // 5) Initialiser la tolérance pour comparer des réels à zéro
+    EPSILON := 1e-9
+
+    // 6) Parcourir chaque paire et tester orthogonalité
+    FOR i FROM 0 TO n - 1 DO
+
+        // ----- Variante A : utiliser la procédure dot_product (ps passé par référence) -----
+        // Appel de la procédure : v1 et v2 sont passés en lecture (par valeur),
+        // ps est passé par référence et contient le résultat après l'appel.
+        dot_product(V1[i], V2[i], m, ps)
+
+        // Utiliser ps pour le test (prendre en compte EPSILON)
+        IF ABS(ps) <= EPSILON THEN
+            WRITE("Pair ", i, " : orthogonal (dot product ≈ ", ps, ")")
+        ELSE
+            WRITE("Pair ", i, " : NOT orthogonal (dot product = ", ps, ")")
+        END_IF
+
+        // ----- Variante B : (alternative) utiliser la fonction dot_product_func -----
+        /*
+        result := dot_product_func(V1[i], V2[i], m)
+        IF ABS(result) <= EPSILON THEN
+            WRITE("Pair ", i, " : orthogonal (dot product ≈ ", result, ")")
+        ELSE
+            WRITE("Pair ", i, " : NOT orthogonal (dot product = ", result, ")")
+        END_IF
+        */
+
+    END_FOR
+
+    WRITE("End of program.")
+END
+
+// -------------------------------
+// Fin du fichier
+// -------------------------------
